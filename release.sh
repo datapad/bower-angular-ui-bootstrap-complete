@@ -2,15 +2,17 @@
 set -ue
 
 rm -rf repo/
-git clone https://github.com/angular-ui/bootstrap.git repo/ --branch "$1" --depth 1
+git clone https://github.com/angular-ui/bootstrap.git repo/ --branch gh-pages --depth 1
 
-cd repo/
+rm -rf package/
+mkdir package/
 
-npm install || true # some missing NPM packages
+cd package/
 
-grunt build
-
-cd dist/
+cp ../repo/ui-bootstrap-$1.js ui-bootstrap.js
+cp ../repo/ui-bootstrap-$1.min.js ui-bootstrap.min.js
+cp ../repo/ui-bootstrap-tpls-$1.js ui-bootstrap-tpls.js
+cp ../repo/ui-bootstrap-tpls-$1.min.js ui-bootstrap-tpls.min.js
 
 IFS=$'\n' LINES=($(find . -depth 1 | grep -v '\.min\.js$' | awk '{print "\"" $0 "\""}'))
 MAIN=$(printf ", %s" "${LINES[@]}")
